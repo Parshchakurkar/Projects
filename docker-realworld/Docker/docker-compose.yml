@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    container_name: realword_db
+    environment:
+      POSTGRES_USER: realworld
+      POSTGRES_PASSWORD: password100
+      POSTGRES_DB: realworld
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    image: realworld-backend:1.0
+    container_name: backend_api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Database=realworld;Username=realworld;Password=password100
+    ports:
+      - "5001:8080"
+    depends_on:
+      - db
+volumes:
+  pgdata:
