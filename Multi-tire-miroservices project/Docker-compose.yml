@@ -1,0 +1,81 @@
+version: "3.9"
+
+#Services
+services:
+  vote:
+    image: parshchakurkar/vote:1.2
+    networks: 
+      - frontEnd
+      - backEnd
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck: 
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    ports:
+      - "8080:80"
+
+  worker:
+    image: parshchakurkar/worker:1.5
+    networks:
+      - backEnd
+    depends_on:
+      redis:
+        condition: service_healthy 
+      DB:
+        condition: service_healthy 
+
+  result:
+    image: parshchakurkar/result:1.4
+    networks:
+      - frontEnd
+      - backEnd
+    depends_on:
+      DB:
+        condition: service_healthy
+    ports:
+      - "8081:4000"
+
+  DB:
+    image: postgres:15-alpine
+    networks:
+      - backEnd
+    healthcheck:
+      test: /healthchecks/postgres.sh
+      interval: 5s
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres"
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+      - "./healthchecks:/healthchecks"
+  
+  seed:
+    image: parshchakurkar/seed-data:1.1
+    networks:
+      - frontEnd
+    depends_on:
+      vote: 
+        condition: service_healthy
+    restart: "no"
+
+  redis:
+    image: redis:alpine
+    networks:
+      - backEnd
+    volumes:
+      - "./healthchecks:/healthchecks"
+    healthcheck:
+      test: /healthchecks/redis.sh
+      interval: 5s
+
+networks:
+  frontEnd: {}
+  backEnd: {}
+
+volumes:
+  db-data: {}
