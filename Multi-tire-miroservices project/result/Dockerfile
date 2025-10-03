@@ -13,19 +13,6 @@ RUN npm ci && \
 
 RUN npm install -g nodemon
 
-# RUN adduser \
-#     --disabled-password \
-#     --gecos "" \
-#     --home "/nonexistent" \
-#     --shell "/sbin/nologin" \
-#     --no-create-home \
-#     --uid "${UID}" \
-#     appuser
-
-# RUN chmod 777 "/usr/bin/tini"
-
-# USER appuser
-
 COPY . .
 
 EXPOSE 4000

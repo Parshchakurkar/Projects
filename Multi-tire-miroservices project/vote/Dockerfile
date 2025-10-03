@@ -26,21 +26,6 @@ ENV FLASK_ENV=PreProd
 CMD ["python3" , "app.py"]
 
 FROM  base AS final
-
-# Create a non-privileged user that the app will run under.
-# ARG UID=10001
-# RUN adduser \
-#     --disabled-password \
-#     --gecos "" \
-#     --home "/nonexistent" \
-#     --shell "/sbin/nologin" \
-#     --no-create-home \
-#     --uid "${UID}" \
-#     appuser
-
-# # Switch to the non-privileged user to run the application.
-# USER appuser
-
 # Copy the source code into the container.
 COPY . .
 
