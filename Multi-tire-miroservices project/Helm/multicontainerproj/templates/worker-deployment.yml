@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels:
+    app: worker
+  name: worker
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector: 
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+      name: worker
+    spec:
+      containers:
+      - name: worker
+        image: parshchakurkar/worker:1.5
+
+ 
