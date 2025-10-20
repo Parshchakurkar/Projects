@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels:
+    app: vote
+  name: vote
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: vote
+  template:
+    metadata:
+      labels:
+        app: vote
+      name: vote
+    spec:
+      containers:
+      - name: vote
+        image: testacr01fr4t.azurecr.io/vote:1.2
+        ports:
+        - containerPort: 80

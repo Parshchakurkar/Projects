@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  labels:
+    app: result
+  name: result
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: result
+  template:
+    metadata:
+      labels:
+        app: result
+      name: result
+    spec:
+      containers:
+      - name: result
+        image: testacr01fr4t.azurecr.io/result:1.4
+        ports:
+        - containerPort: 4000
+ 
